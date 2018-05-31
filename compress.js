@@ -4,12 +4,8 @@ const zlib = require("zlib");
 async function compress(input, output) {
     return new Promise((resolve, reject) => {
         const gzip = zlib.createGzip();
-
-        let inputStream = fs.createReadStream(input);
+        const inputStream = fs.createReadStream(input);
         const outputStream = fs.createWriteStream(output);
-        outputStream.on("close", () => {
-            resolve(outputStream.bytesWritten);
-        });
 
         inputStream.on("error", err => {
             reject(err);
@@ -19,6 +15,10 @@ async function compress(input, output) {
         });
         outputStream.on("error", err => {
             reject(err);
+        });
+
+        outputStream.on("close", () => {
+            resolve(outputStream.bytesWritten);
         });
 
         inputStream.pipe(gzip).pipe(outputStream);
