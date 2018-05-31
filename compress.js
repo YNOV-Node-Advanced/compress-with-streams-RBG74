@@ -14,6 +14,9 @@ async function compress(input, output) {
         inputStream.on("error", err => {
             reject(err);
         });
+        gzip.on("error", err => {
+            reject(err);
+        });
         outputStream.on("error", err => {
             reject(err);
         });
